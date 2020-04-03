@@ -270,6 +270,7 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
             $tags = $contact_form->scan_form_tags();
             foreach ( $tags as $tag ) {
                 if ( empty( $tag->name ) ) continue;
+                if ( strpos($tag->name, 'webhook_excluded') !== false ) continue;
 
                 // Regular Tags
                 $value = ( ! empty( $_POST[ $tag->name ] ) ) ? $_POST[ $tag->name ] : '';

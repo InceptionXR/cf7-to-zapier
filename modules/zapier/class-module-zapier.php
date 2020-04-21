@@ -91,7 +91,7 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
 				$errorMsg = 'This submission is not valid';
 				
 				if ($statusCode == 400) {
-					if (strpos($errorMessage, 'and owns goods') !== false || strpos($errorMessage, 'Email already signed up') !== false) {
+					if (strpos($errorMessage, 'and owns goods') !== false || strpos($errorMessage, 'Email already signed up') !== false || $errorCode === 7003) {
 						$errorMsg = "It seems like you are already a Bookful subscriber.<br>Please contact support@inceptionxr.com to learn how you can enjoy this exclusive offer.";
 					} 
 // 					elseif ($errorCode == 7002) {

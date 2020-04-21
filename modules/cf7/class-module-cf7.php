@@ -225,18 +225,8 @@ if ( ! class_exists( 'CFTZ_Module_CF7' ) ) {
                  */
                 do_action( 'ctz_trigger_webhook', $data, $properties['hook_url'] );
             } catch (Exception $exception) {
-                /**
-                 * Filter: ctz_trigger_webhook_error_message
-                 *
-                 * The 'ctz_trigger_webhook_error_message' filter change the message in case of error.
-                 * Default is CF7 error message, but you can access exception to create your own.
-                 *
-                 * You can ignore errors returning false:
-                 * add_filter( 'ctz_trigger_webhook_error_message', '__return_empty_string' );
-                 *
-                 * @since 1.4.0
-                 */
-                $error_message =  apply_filters( 'ctz_trigger_webhook_error_message', $contact_form->message( 'mail_sent_ng' ), $exception );
+                
+                $error_message = $exception->getMessage();  
 
                 // If empty ignore
                 if ( empty( $error_message ) ) return;

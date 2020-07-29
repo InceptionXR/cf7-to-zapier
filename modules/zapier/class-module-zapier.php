@@ -79,32 +79,13 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
              *
              * @since    1.1.0
              */
-            $response = wp_remote_post( $hook_url, apply_filters( 'ctz_post_request_args', $args ) );
-			$body = wp_remote_retrieve_body( $response );
-			$data = json_decode( $body, true );
-			
-			$statusCode = $data['status'];
-			$errorCode = $data['error_code'];
-			$errorMessage = $data['message'];
+            $result = wp_remote_post( $hook_url, apply_filters( 'ctz_post_request_args', $args ) );
 
-			if ($statusCode >= 400) {
-				$errorMsg = 'This submission is not valid';
-				
-				if ($statusCode == 400) {
-					if (strpos($errorMessage, 'and owns goods') !== false || strpos($errorMessage, 'Email already signed up') !== false || $errorCode === 7004) {
-						$errorMsg = "It seems like you are already a Bookful subscriber.<br>Please contact support@inceptionxr.com to learn how you can enjoy this exclusive offer.";
-					} 
-// 					elseif ($errorCode == 7002) {
-// 						$errorMsg = "This coupon has already been redeemed.";
-// 					} 
-				}
-// 				elseif ( $statusCode == 404 ) {
-// 					$errorMsg = 'Error loading coupon';
-// 				}			
-				
-				throw new Exception( $errorMsg );
-			}
-			
+            // If result is a WP Error, throw a Exception woth the message.
+            if ( is_wp_error( $result ) ) {
+                throw new Exception( $result->get_error_message() );
+            }
+
             /**
              * Action: ctz_post_request_result
              *
@@ -113,7 +94,7 @@ if ( ! class_exists( 'CFTZ_Module_Zapier' ) ) {
              *
              * @since    1.4.0
              */
-            do_action( 'ctz_post_request_result', $response, $hook_url );
+            do_action( 'ctz_post_request_result', $result, $hook_url );
         }
 
         /**
